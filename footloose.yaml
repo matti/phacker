@@ -1,0 +1,25 @@
+cluster:
+  name: cluster
+  privateKey: cluster-key
+machines:
+- count: 1
+  spec:
+    image: phacker
+    name: master%d
+    portMappings:
+    - containerPort: 22
+      hostPort: 2222
+    - containerPort: 6443
+      hostPort: 6443
+    - hostPort: 2375
+      containerPort: 2375
+    privileged: true
+    volumes:
+    - type: volume
+      destination: /var/lib/docker
+    - type: bind
+      source: /lib/modules
+      destination: /lib/modules
+    - type: bind
+      source: /mnt
+      destination: /nfs

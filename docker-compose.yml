@@ -1,0 +1,6 @@
+version: '2'
+
+services:
+  phacker:
+    build: .
+    image: phacker

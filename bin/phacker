@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -e
+
+# source "/usr/local/opt/chpharos/share/chpharos/chpharos.sh"
+# chpharos install 2.3.3
+# chpharos use 2.3.3
+
+mode="$1"
+shift;
+
+case "$mode" in
+  "create")
+    footloose create
+    bin/pharos-cluster-"$(uname)" up --yes #--debug
+  ;;
+  "destroy")
+    footloose delete
+  ;;
+  "recreate")
+    $0 create
+    sleep 0.5 # bug in footloose (??)
+    $0 destroy
+  ;;
+  "kubeconfig")
+    bin/pharos-cluster-"$(uname)" kubeconfig -n phacker
+  ;;
+  "footloose:ssh")
+    footloose ssh root@master0 "$@"
+  ;;
+  *)
+    echo ""
+    echo "USAGE: phacker create|recreate|destroy|footloose:ssh"
+    exit 1
+  ;;
+esac
